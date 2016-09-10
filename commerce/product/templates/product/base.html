@@ -1,0 +1,83 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <title>REEN</title>
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'website/assets/css/bootstrap.min.css' %}" rel="stylesheet">
+    
+    <!-- Customizable CSS -->
+    <link href="{% static 'website/assets/css/main.css' %}" rel="stylesheet" data-skrollr-stylesheet>
+    <link href="{% static 'website/assets/css/orange.css' %}" rel="stylesheet" title="Color">
+    <link href="{% static 'website/assets/css/owl.carousel.css' %}" rel="stylesheet">
+    <link href="{% static 'website/assets/css/owl.transitions.css' %}" rel="stylesheet">
+    <link href="{% static 'website/assets/css/animate.min.css' %}" rel="stylesheet">
+    
+    <!-- Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,900,300,700" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic" rel="stylesheet">
+    
+    <!-- Icons/Glyphs -->
+    <link href="{% static 'website/assets/fonts/fontello.css' %}" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+  </head>
+  
+<body>
+{% include "__menu.html" %}
+
+    <!-- ============================================================= MAIN ============================================================= -->
+    
+<main>
+
+{% block content %}
+{% endblock %}
+
+
+
+</main>
+    
+    <!-- ============================================================= MAIN : END ============================================================= -->
+{% include "__footer.html" %}
+{% include "product/jscript.html" %}
+<script>
+$(document).ready(function(){
+  {% block jquery %}
+
+  {% endblock %}
+
+});
+</script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

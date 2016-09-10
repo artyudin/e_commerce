@@ -1,0 +1,16 @@
+{% extends 'product/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="col-sm-6">
+<h3>Continue as Guest</h3>
+<form method="POST" action="{% url 'order:create_address' %}">
+{% csrf_token %}
+{{ form|crispy }}
+<input class="btn" type="submit" name="" value="Continue as Guest"/>
+</form>
+</div>
+
+{% endblock %}

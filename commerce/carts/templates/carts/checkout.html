@@ -1,0 +1,87 @@
+{% extends 'product/base.html' %}
+{% load crispy_forms_tags %}
+
+<script>
+{% block jquery %}
+var clientToken = "{{ client_token}}";
+
+braintree.setup(clientToken, "dropin", {
+  container: "payment-form"
+});
+
+{% endblock %}
+</script>
+
+
+{% block content %}
+
+
+
+
+{% if not user_can_continue %}
+
+<div class="col-sm-6">
+<h3>Continue as Guest</h3>
+<form method="POST" action="">
+{% csrf_token %}
+{{ form|crispy }}
+<input class="btn" type="submit" name="" value="Continue as Guest"/>
+</form>
+</div>
+
+<div class="col-sm-6">
+<p class="lead"> Login to Continue</p>
+<form method="POST" action="#ADD LOGIN URL">
+{% csrf_token %}
+
+{{ login_form|crispy }}
+<input type="hidden" name="next" value="{{ next_url }}"/>
+<input class="btn" type="submit" name="" value="Login"/>
+</form>
+</div>
+
+{% else %}
+<div class='col-sm-4 col-sm-offset-4 text-center'>
+<p class="lead">Your order</p>
+{% include "order/order_summary_short.html" with order=order %}
+<table class="table">
+<tr><td>Item(s){{ order.cart.cartitem_set.count }}
+Cart Items: 
+<ul>{% for item in order.cart.cartitem_set.all %}
+<ul>{{ item.get_title }}</ul>
+{% endfor %}</ul></td></tr>
+<tr><td>Cart Subtotal: {{ order.cart.subtotal }}</td></tr>
+<tr><td>Tax: {{ order.cart.tax_total }}</td></tr>
+<tr><td>Items Total: {{ order.cart.total }}</td></tr>
+<tr><td>Shipping: {{ order.shipping_total_price }}</td></tr>
+<tr><td>Order Total: {{ order.order_total }}</td></tr>
+</table>
+</div>
+
+<div class='col-sm-4 col-sm-offset-4 text-center'>
+<p class="lead"><b>Billing address:</b></p><br/>
+{{ order.billing_address.get_address }}
+
+</div>
+<p class="lead"><b>Shipping to:</b></p><br/>
+{{ order.shipping_address.get_address }}
+<p><a href="{% url 'order:checkout_address' %}">Change an address</a></p>
+<p><a href="{% url 'order:create_address' %}">Add an address</a></p>
+
+
+
+<form id="checkout" method="POST" action="{% url 'carts:final_checkout' %}">
+{% csrf_token %}
+
+<!-- <input type="hidden" name="payment_token" value="ABC"/> -->
+  <div id="payment-form"></div>
+<p><b><button type="submit">Complete order</button></b></p>
+</form>
+
+
+</div>
+
+{% endif %}
+
+
+{% endblock %}

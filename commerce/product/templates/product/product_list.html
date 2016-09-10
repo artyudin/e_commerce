@@ -1,0 +1,59 @@
+{% extends "product/base.html" %}
+
+
+{% block content %}
+<!-- ============================================================= SECTION – PRICING TABLES ============================================================= -->
+			
+			<section id="pricing-tables">
+				<div class="container inner">
+					
+					<div class="row">
+						<div class="col-md-8 col-sm-9 center-block text-center">
+							<header>
+								<h1>Simple pricing, no surprises</h1>
+								<p>In order to simplify the process, we have created Packages that will get you started right away.  If you can’t find the package that suits your needs, email us for a custom solution:
+								</p>
+							</header>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+					
+					<div class="row pricing col-4">
+					{% for object in object_list %}
+						
+						<div class="col-lg-3 col-sm-6 inner-top-sm">
+							<div class="plan">
+								
+								<header>
+									<h2>{{ object.title }}</h2>
+									
+									<div class="price">
+										<span class="currency">$</span>
+										<span class="amount">499</span>
+										<span class="period">/Month</span>
+									</div><!-- /.price -->
+									
+									<a  href='{{ object.get_absolute_url }}' class="btn">Learn more</a>
+								</header>
+								
+								<ul class="features">
+									<li><i class="icon-picture-1"></i>Custom artwork design </li>
+									<li><i class="icon-picture"></i>4 full comp designs</li>
+									<li><i class="icon-scissors"></i>Unlimited revisions </li>
+									<li><i class="icon-vcard"></i>Company stationary</li>
+									<li><i class="icon-install"></i>Digital delivery</li>
+								</ul><!-- /.features -->
+								
+							</div><!-- /.plan -->
+						</div><!-- /.col -->	
+				{% endfor %}
+					</div><!-- /.row -->
+					
+				</div><!-- /.container -->
+			</section>
+			
+			<!-- ============================================================= SECTION – PRICING TABLES : END ============================================================= -->
+
+
+
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "product/base.html" %}
+
+<script>
+{% block jquery %}
+	function showFlashMessage(message){
+		var template = "{% include "carts/alert.html" with message='" + message + "' %}"
+			$("body").append(template);
+			$(".container-alert-flash").fadeIn();
+			setTimeout(function(){
+				$(".container-alert-flash").fadeOut();
+			}, 2500);
+
+
+	}
+$(".item-qty").change(function(){
+	// $(this).next(".btn-update").fadeIn();
+	// event.preventDefault();
+	var item = $(this).prev("input[type='hidden']").val();
+	var qty = $(this).val();
+	var data = {
+		item:item,
+		qty:qty
+
+	}
+	$.ajax({
+		type:"GET",
+		url:"{% url 'carts:cart' %}",
+		data: data,
+		success: function(data){
+			$("#jquery-message").text("Added" + data.item_added + "Deleted" + data.deleted)
+			if (data.deleted){
+				$("#item-"+item).fadeOut();
+				$("#subtotal").text(data.subtotal);
+				$("#tax_total").text(data.tax_total);
+				$("#cart_total").text(data.cart_total);
+				
+			} else{
+				$("#item-line-total-"+item).text(data.line_total);
+				$("#subtotal").text(data.subtotal);
+				$("#tax_total").text(data.tax_total);
+				$("#cart_total").text(data.cart_total);
+			}
+
+			if (data.total_items == 0){
+				$(".table").fadeOut()
+				showFlashMessage("Your cart is empty")
+
+			}
+
+			var message = ""
+			if (data.item_added){
+				message = "New item added"
+			} else if (data.deleted){
+				message = "item removed"
+			} else{
+				message = "Item updated"
+			}
+			showFlashMessage(message);
+			updateCartItemCount();
+		},
+		error:function(response, error){
+			$("#add-form").submit()
+		},
+
+	});
+
+});
+
+{% endblock %}
+</script>
+
+
+
+
+{% block content %}
+
+
+{% if object.cartitem_set.count < 1 %}
+
+<h1>Your cart is empty</h1>
+
+{% else %}
+
+<table class="table">
+
+{% for item in object.cartitem_set.all %}
+
+<tr id="item-{{ item.item.id }}">
+	
+	<td>{{ item.get_title }}</td>
+	<td><form action"." method="GET"><input type="hidden" name="item" value="{{ item.item.id }}"/><input type="number" class="item-qty" name="qty" value="{{ item.quantity }}"/><input type="submit" class="btn-update btn btn-link" value="Update item" style="display:none;"/></form></td>
+	<td id="item-line-total-{{ item.item.id }}">{{ item.line_item_total }}</td>
+	<td></td>
+	<td><a href="{{ item.remove }}">Remove</a></td>
+	
+</tr>
+{% endfor %}
+<tr>
+	<td  colspan="4" class="text-right">Subtotal:<span id="subtotal">{{ object.subtotal}}</span></td>
+</tr>
+<tr>
+	<td  colspan="4" class="text-right">Tax:<span id="tax_total">{{ object.tax_total}}</span></td>
+</tr>
+<tr>
+	<td  colspan="4" class="text-right">Total:<span id="cart_total">{{ object.cart_total}}</span></td>
+</tr>
+<tr>
+	<td  colspan="4" class="text-right"><a href="{% url 'carts:checkout' %}">Checkout</a></td>
+</tr>
+</table>
+{% endif %}
+{% endblock %}
